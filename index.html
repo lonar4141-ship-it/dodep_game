@@ -273,7 +273,7 @@ canvas {
 }
 
 .safe-door.open {
-    transform: rotateY(110deg);
+    transform: rotateY(-110deg);
 }
 
 #safe-video {
@@ -531,18 +531,14 @@ function drawWheel() {
     for (var i = 0; i < num; i++) {
         var angle = currentAngle + i * arc;
         
-        var gradient = ctx.createRadialGradient(160, 160, 20, 160, 160, 150);
-        gradient.addColorStop(0, colors[i % colors.length]);
-        gradient.addColorStop(1, '#111');
-
         ctx.beginPath();
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = colors[i % colors.length];
         ctx.moveTo(160, 160);
         ctx.arc(160, 160, 150, angle, angle + arc);
         ctx.fill();
 
         ctx.lineWidth = 2;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.strokeStyle = '#ffffff';
         ctx.stroke();
 
         ctx.save();
@@ -550,8 +546,6 @@ function drawWheel() {
         ctx.rotate(angle + arc / 2);
         ctx.textAlign = "right";
         ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "#000000";
-        ctx.shadowBlur = 5;
         ctx.font = "bold 13px Segoe UI";
         ctx.fillText(currentSectors[i].label, 140, 5);
         ctx.restore();
@@ -559,10 +553,7 @@ function drawWheel() {
 
     ctx.beginPath();
     ctx.arc(160, 160, 25, 0, 2 * Math.PI);
-    var centerGrad = ctx.createRadialGradient(160, 160, 5, 160, 160, 25);
-    centerGrad.addColorStop(0, '#ffffff');
-    centerGrad.addColorStop(1, '#2c3e50');
-    ctx.fillStyle = centerGrad;
+    ctx.fillStyle = '#2c3e50';
     ctx.fill();
     ctx.lineWidth = 3;
     ctx.strokeStyle = '#f1c40f';
@@ -711,4 +702,9 @@ drawWheel();
 updateUI();
 
 if (isKeyBought) {
-    var video = document.ge
+    var video = document.getElementById('safe-video');
+    video.play();
+}
+</script>
+</body>
+</html>
