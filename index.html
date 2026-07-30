@@ -352,7 +352,7 @@ canvas {
 var balance = parseInt(localStorage.getItem('rick_balance')) || 0;
 var luckMultiplier = parseFloat(localStorage.getItem('rick_luck_mult')) || 1.0;
 var unlockedSectors = JSON.parse(localStorage.getItem('rick_sectors')) || [];
-var isKeyBought = localStorage.getItem('rick_key') === 'true';
+var isKeyBought = false;
 
 var baseSectors = [
     { label: '100$', val: 100, baseWeight: 100 },
@@ -486,7 +486,6 @@ function saveProgress() {
     localStorage.setItem('rick_balance', balance);
     localStorage.setItem('rick_luck_mult', luckMultiplier);
     localStorage.setItem('rick_sectors', JSON.stringify(unlockedSectors));
-    localStorage.setItem('rick_key', isKeyBought);
 }
 
 function updateSectorsList() {
@@ -515,6 +514,8 @@ function updateUI() {
 
     if (isKeyBought) {
         document.getElementById('safe-door').classList.add('open');
+    } else {
+        document.getElementById('safe-door').classList.remove('open');
     }
 }
 
@@ -685,12 +686,15 @@ setupExtraSectorButton('buy-50k', 50000, 50000);
 
 document.getElementById('buy-key').addEventListener('click', function() {
     if (balance >= 130000 && !isKeyBought) {
-        balance -= 130000;
         isKeyBought = true;
         playBuySound();
         
         var video = document.getElementById('safe-video');
-        video.play();
+        video.currentTime = 0;
+        var playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(function(error) {});
+        }
         
         updateUI();
         saveProgress();
@@ -700,11 +704,6 @@ document.getElementById('buy-key').addEventListener('click', function() {
 updateSectorsList();
 drawWheel();
 updateUI();
-
-if (isKeyBought) {
-    var video = document.getElementById('safe-video');
-    video.play();
-}
 </script>
 </body>
 </html>
